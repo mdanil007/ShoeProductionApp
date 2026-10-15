@@ -225,6 +225,291 @@ namespace ShoeProductionApp.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("ShoeProductionApp.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactPerson")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clients");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Color", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("character varying(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Colors", t =>
+                        {
+                            t.HasCheckConstraint("CK_Color_Code", "\"Code\" ~ '^[0-9]$'");
+                        });
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Leather", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("character varying(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Leathers", t =>
+                        {
+                            t.HasCheckConstraint("CK_Leather_Code", "\"Code\" ~ '^[0-9]$'");
+                        });
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Lining", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(1)
+                        .HasColumnType("character varying(1)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Linings", t =>
+                        {
+                            t.HasCheckConstraint("CK_Lining_Code", "\"Code\" ~ '^[0-9]$'");
+                        });
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Model", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)");
+
+                    b.Property<int>("ColorId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
+
+                    b.HasIndex("Code", "ColorId")
+                        .IsUnique();
+
+                    b.ToTable("Models", t =>
+                        {
+                            t.HasCheckConstraint("CK_Model_Code", "\"Code\" ~ '^[0-9]{2}$'");
+                        });
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Order", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset?>("ActualShipmentDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("ClientId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("text");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedByUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateOnly>("PlannedShipmentDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.OrderSize", b =>
+                {
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Size")
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)");
+
+                    b.Property<int>("Count")
+                        .HasColumnType("integer");
+
+                    b.HasKey("OrderId", "Size");
+
+                    b.ToTable("OrderSizes", t =>
+                        {
+                            t.HasCheckConstraint("CK_OrderSize_Count", "\"Count\" > 0");
+
+                            t.HasCheckConstraint("CK_OrderSize_Size", "\"Size\" ~ '^(3[0-9]|[4-5][0-9]|60)$'");
+                        });
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.OrderStatusHistory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTimeOffset>("ChangedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ChangedByUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChangedByUserId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderStatusHistories");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Product", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Gender")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LeatherId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("LiningId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("ModelId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LeatherId");
+
+                    b.HasIndex("LiningId");
+
+                    b.HasIndex("ModelId");
+
+                    b.HasIndex("Gender", "LeatherId", "LiningId", "ModelId")
+                        .IsUnique();
+
+                    b.ToTable("Products", t =>
+                        {
+                            t.HasCheckConstraint("CK_Product_Gender", "\"Gender\" IN (8, 9)");
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -274,6 +559,138 @@ namespace ShoeProductionApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Model", b =>
+                {
+                    b.HasOne("ShoeProductionApp.Entities.Color", "Color")
+                        .WithMany("Models")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Order", b =>
+                {
+                    b.HasOne("ShoeProductionApp.Entities.Client", "Client")
+                        .WithMany("Orders")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ShoeProductionApp.Entities.ApplicationUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ShoeProductionApp.Entities.Product", "Product")
+                        .WithMany("Orders")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.OrderSize", b =>
+                {
+                    b.HasOne("ShoeProductionApp.Entities.Order", "Order")
+                        .WithMany("Sizes")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.OrderStatusHistory", b =>
+                {
+                    b.HasOne("ShoeProductionApp.Entities.ApplicationUser", "ChangedByUser")
+                        .WithMany()
+                        .HasForeignKey("ChangedByUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ShoeProductionApp.Entities.Order", "Order")
+                        .WithMany("StatusHistory")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChangedByUser");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Product", b =>
+                {
+                    b.HasOne("ShoeProductionApp.Entities.Leather", "Leather")
+                        .WithMany("Products")
+                        .HasForeignKey("LeatherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ShoeProductionApp.Entities.Lining", "Lining")
+                        .WithMany("Products")
+                        .HasForeignKey("LiningId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("ShoeProductionApp.Entities.Model", "Model")
+                        .WithMany("Products")
+                        .HasForeignKey("ModelId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Leather");
+
+                    b.Navigation("Lining");
+
+                    b.Navigation("Model");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Client", b =>
+                {
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Color", b =>
+                {
+                    b.Navigation("Models");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Leather", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Lining", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Model", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Order", b =>
+                {
+                    b.Navigation("Sizes");
+
+                    b.Navigation("StatusHistory");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Product", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
