@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI;
 using ShoeProductionApp.Data;
 using ShoeProductionApp.Entities;
+using ShoeProductionApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,9 @@ builder.Services
     })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddScoped<ArticleCodeServices>();
+builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
 
