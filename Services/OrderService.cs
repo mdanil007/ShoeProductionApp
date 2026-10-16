@@ -242,6 +242,132 @@ public class OrderService
         };
     }
 
+
+    // Перевод заказа на следующий производственный этап.
+    public async Task AdvanceStatusAsync(
+        int orderId,
+        string changedByUserId)
+    {
+        ValidateUserId(changedByUserId);
+
+        var userIsActive = await _db.Users.AnyAsync(x =>
+            x.Id == changedByUserId && x.IsActive);
+
+        if (!userIsActive)
+        {
+            throw new InvalidOperationException(
+                "Пользователь не найден или его учётная запись заблокирована.");
+        }
+
+        var order = await _db.Orders
+            .SingleOrDefaultAsync(x => x.Id == orderId)
+            ?? throw new KeyNotFoundException("Заказ не найден.");
+
+        if (order.Status == OrderStatus.Shipped)
+        {
+            throw new InvalidOperationException(
+                "Заказ уже отправлен. Изменение статуса невозможно.");
+        }
+
+        if (order.Status == OrderStatus.Cancelled)
+        {
+            throw new InvalidOperationException(
+                "Отменённый заказ нельзя продолжить.");
+        }
+
+        if (!Enum.IsDefined(order.Status))
+        {
+            throw new InvalidOperationException(
+                "У заказа обнаружен неизвестный статус.");
+        }
+
+        var nextStatus = (OrderStatus)((int)order.Status + 1);
+        var now = DateTimeOffset.UtcNow;
+
+        order.Status = nextStatus;
+
+        if (nextStatus == OrderStatus.Shipped)
+        {
+            order.ActualShipmentDate = now;
+        }
+
+        _db.OrderStatusHistories.Add(new OrderStatusHistory
+        {
+            OrderId = order.Id,
+            Status = nextStatus,
+            ChangedAt = now,
+            ChangedByUserId = changedByUserId
+        });
+
+        // Изменение заказа и запись истории сохраняются вместе.
+        await _db.SaveChangesAsync();
+    }
+
+    // Отмена заказа. Право отмены руководителем проверяется
+    // на уровне авторизации контроллера.
+    public async Task CancelAsync(
+        int orderId,
+        string changedByUserId)
+    {
+        ValidateUserId(changedByUserId);
+
+        var userIsActive = await _db.Users.AnyAsync(x =>
+            x.Id == changedByUserId && x.IsActive);
+
+        if (!userIsActive)
+        {
+            throw new InvalidOperationException(
+                "Пользователь не найден или его учётная запись заблокирована.");
+        }
+
+        var order = await _db.Orders
+            .SingleOrDefaultAsync(x => x.Id == orderId)
+            ?? throw new KeyNotFoundException("Заказ не найден.");
+
+        if (order.Status == OrderStatus.Shipped)
+        {
+            throw new InvalidOperationException(
+                "Отправленный заказ отменить нельзя.");
+        }
+
+        if (order.Status == OrderStatus.Cancelled)
+        {
+            throw new InvalidOperationException(
+                "Заказ уже отменён.");
+        }
+
+        if (!Enum.IsDefined(order.Status) ||
+            (int)order.Status > (int)OrderStatus.Shipping)
+        {
+            throw new InvalidOperationException(
+                "Отмена заказа на этом этапе невозможна.");
+        }
+
+        var now = DateTimeOffset.UtcNow;
+
+        order.Status = OrderStatus.Cancelled;
+
+        _db.OrderStatusHistories.Add(new OrderStatusHistory
+        {
+            OrderId = order.Id,
+            Status = OrderStatus.Cancelled,
+            ChangedAt = now,
+            ChangedByUserId = changedByUserId
+        });
+
+        await _db.SaveChangesAsync();
+    }
+
+    private static void ValidateUserId(string userId)
+    {
+        if (string.IsNullOrWhiteSpace(userId))
+        {
+            throw new ArgumentException(
+                "Не удалось определить пользователя.");
+        }
+    }
+
+
     private static List<OrderSizeInputViewModel> ValidateSizes(
         IEnumerable<OrderSizeInputViewModel> sizes)
     {
