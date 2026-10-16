@@ -28,7 +28,7 @@ builder.Services
 builder.Services.AddScoped<ArticleCodeService>();
 builder.Services.AddScoped<ProductService>();
 builder.Services.AddScoped<ReferenceDataService>();
-
+builder.Services.AddScoped<ClientService>();
 
 var app = builder.Build();
 
