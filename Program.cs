@@ -25,8 +25,10 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-builder.Services.AddScoped<ArticleCodeServices>();
+builder.Services.AddScoped<ArticleCodeService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddScoped<ReferenceDataService>();
+
 
 var app = builder.Build();
 

@@ -2,7 +2,7 @@
 
 namespace ShoeProductionApp.Services
 {
-    public class ArticleCodeServices
+    public class ArticleCodeService
     {
         public string BuildArticleCode(Product product)
         {
