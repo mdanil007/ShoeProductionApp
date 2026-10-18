@@ -26,6 +26,16 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        @if (User.IsInRole("Руководитель") ||
+                            User.IsInRole("Мастер") ||
+                            User.IsInRole("Менеджер"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark"
+                                   asp-controller="Reference"
+                                   asp-action="Index">Справочник</a>
+                            </li>
+                        }
                         @if (User.IsInRole("Администратор"))
                         {
                             <li class="nav-item">
