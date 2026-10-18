@@ -127,6 +127,7 @@ public class OrderService
                     .ThenInclude(x => x.Color)
             .Include(x => x.Product.Leather)
             .Include(x => x.Product.Lining)
+            .Include(x => x.Sizes)
             .ToListAsync();
 
         var todayInMoscow = DateOnly.FromDateTime(

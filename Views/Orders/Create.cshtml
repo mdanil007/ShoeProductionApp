@@ -1,0 +1,326 @@
+﻿@model ShoeProductionApp.ViewModels.CreateOrderViewModel
+
+@{
+    ViewData["Title"] = "Создание заказа";
+}
+
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Создание производственного заказа</h1>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            К списку заказов
+        </a>
+    </div>
+
+    <form asp-action="Create" method="post" id="createOrderForm">
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"
+             role="alert"></div>
+
+        <div class="card mb-4">
+            <div class="card-header">Основные сведения</div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="ClientId" class="form-label">
+                        Клиент
+                    </label>
+                    <select asp-for="ClientId"
+                            asp-items="Model.Clients"
+                            class="form-select">
+                        <option value="">Выберите клиента</option>
+                    </select>
+                    <span asp-validation-for="ClientId"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="ProductId" class="form-label">
+                        Артикул
+                    </label>
+                    <select asp-for="ProductId"
+                            asp-items="Model.Products"
+                            class="form-select">
+                        <option value="">Выберите артикул</option>
+                    </select>
+                    <span asp-validation-for="ProductId"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PlannedShipmentDate"
+                           class="form-label">
+                        Плановая дата отгрузки
+                    </label>
+                    <input asp-for="PlannedShipmentDate"
+                           type="date"
+                           min="@Model.MinimumShipmentDate"
+                           class="form-control" />
+                    <span asp-validation-for="PlannedShipmentDate"
+                          class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Comment" class="form-label">
+                        Комментарий
+                    </label>
+                    <textarea asp-for="Comment"
+                              class="form-control"
+                              rows="3"
+                              maxlength="1000"
+                              placeholder="Необязательный комментарий"></textarea>
+                    <span asp-validation-for="Comment"
+                          class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Размерный ряд</span>
+                <button type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        id="addSizeButton">
+                    + Добавить размер
+                </button>
+            </div>
+
+            <div class="card-body">
+                <p class="text-muted small">
+                    Укажите размер и количество пар. Допускаются размеры от 30 до 60.
+                    Каждый размер можно добавить только один раз.
+                </p>
+
+                <div class="row fw-semibold mb-2 d-none d-md-flex">
+                    <div class="col-md-5">Размер</div>
+                    <div class="col-md-5">Количество пар</div>
+                    <div class="col-md-2"></div>
+                </div>
+
+                <div id="sizesContainer">
+                    @for (var i = 0; i < Model.Sizes.Count; i++)
+                    {
+                        <div class="row g-2 align-items-start mb-2 size-row">
+                            <div class="col-md-5">
+                                <label class="form-label d-md-none">
+                                    Размер
+                                </label>
+                                <input asp-for="Sizes[i].Size"
+                                       class="form-control size-value"
+                                       inputmode="numeric"
+                                       maxlength="2"
+                                       placeholder="Например, 40" />
+                                <span asp-validation-for="Sizes[i].Size"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-5">
+                                <label class="form-label d-md-none">
+                                    Количество пар
+                                </label>
+                                <input asp-for="Sizes[i].Count"
+                                       type="number"
+                                       min="1"
+                                       step="1"
+                                       class="form-control size-count" />
+                                <span asp-validation-for="Sizes[i].Count"
+                                      class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-2">
+                                <button type="button"
+                                        class="btn btn-outline-danger remove-size w-100">
+                                    Удалить
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <span asp-validation-for="Sizes" class="text-danger"></span>
+
+                <hr />
+
+                <div class="d-flex justify-content-between align-items-center">
+                    <span class="fw-semibold">Общее количество пар:</span>
+                    <span id="totalPairs" class="fs-5 fw-bold">8</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-danger mb-3" id="sizeClientError" role="alert"></div>
+
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">
+                Создать заказ
+            </button>
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Отмена
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        (() => {
+            const container = document.getElementById("sizesContainer");
+            const addButton = document.getElementById("addSizeButton");
+            const totalPairs = document.getElementById("totalPairs");
+            const errorBox = document.getElementById("sizeClientError");
+            const form = document.getElementById("createOrderForm");
+
+            function updateIndexes() {
+                const rows = container.querySelectorAll(".size-row");
+
+                rows.forEach((row, index) => {
+                    row.querySelectorAll("input").forEach(input => {
+                        input.name = input.name.replace(
+                            /Sizes\[\d+\]/,
+                            `Sizes[${index}]`
+                        );
+
+                        input.id = input.id.replace(
+                            /Sizes_\d+__/,
+                            `Sizes_${index}__`
+                        );
+                    });
+
+                    row.querySelectorAll("label[for]").forEach(label => {
+                        label.htmlFor = label.htmlFor.replace(
+                            /Sizes_\d+__/,
+                            `Sizes_${index}__`
+                        );
+                    });
+
+                    row.querySelectorAll("[data-valmsg-for]").forEach(span => {
+                        span.dataset.valmsgFor =
+                            span.dataset.valmsgFor.replace(
+                                /Sizes\[\d+\]/,
+                                `Sizes[${index}]`
+                            );
+                    });
+                });
+            }
+
+            function updateTotal() {
+                let total = 0;
+
+                container.querySelectorAll(".size-count").forEach(input => {
+                    const value = Number.parseInt(input.value, 10);
+
+                    if (Number.isInteger(value) && value > 0) {
+                        total += value;
+                    }
+                });
+
+                totalPairs.textContent = total.toString();
+            }
+
+            function addSizeRow(size = "", count = "1") {
+                const index = container.querySelectorAll(".size-row").length;
+                const row = document.createElement("div");
+
+                row.className = "row g-2 align-items-start mb-2 size-row";
+
+                row.innerHTML = `
+                            <div class="col-md-5">
+                                <label class="form-label d-md-none">Размер</label>
+                                <input name="Sizes[${index}].Size"
+                                       id="Sizes_${index}__Size"
+                                       value="${size}"
+                                       class="form-control size-value"
+                                       inputmode="numeric"
+                                       maxlength="2"
+                                       placeholder="Например, 46" />
+                            </div>
+                            <div class="col-md-5">
+                                <label class="form-label d-md-none">Количество пар</label>
+                                <input name="Sizes[${index}].Count"
+                                       id="Sizes_${index}__Count"
+                                       value="${count}"
+                                       type="number"
+                                       min="1"
+                                       step="1"
+                                       class="form-control size-count" />
+                            </div>
+                            <div class="col-md-2">
+                                <button type="button"
+                                        class="btn btn-outline-danger remove-size w-100">
+                                    Удалить
+                                </button>
+                            </div>`;
+
+                container.appendChild(row);
+                updateTotal();
+            }
+
+            addButton.addEventListener("click", () => addSizeRow());
+
+            container.addEventListener("click", event => {
+                const button = event.target.closest(".remove-size");
+
+                if (!button) return;
+
+                button.closest(".size-row").remove();
+                updateIndexes();
+                updateTotal();
+            });
+
+            container.addEventListener("input", event => {
+                if (event.target.matches(".size-count")) {
+                    updateTotal();
+                }
+
+                errorBox.textContent = "";
+            });
+
+            form.addEventListener("submit", event => {
+                const rows = [...container.querySelectorAll(".size-row")];
+                const seen = new Set();
+                const errors = [];
+
+                if (rows.length === 0) {
+                    errors.push("Добавьте хотя бы один размер.");
+                }
+
+                for (const row of rows) {
+                    const sizeInput = row.querySelector(".size-value");
+                    const countInput = row.querySelector(".size-count");
+
+                    const sizeText = sizeInput.value.trim();
+                    const size = Number.parseInt(sizeText, 10);
+                    const count = Number.parseInt(countInput.value, 10);
+
+                    if (!/^\d{2}$/.test(sizeText) ||
+                        !Number.isInteger(size) ||
+                        size < 30 || size > 60) {
+                        errors.push("Размер должен быть целым числом от 30 до 60.");
+                        break;
+                    }
+
+                    if (seen.has(size)) {
+                        errors.push(`Размер ${size} указан несколько раз.`);
+                        break;
+                    }
+
+                    seen.add(size);
+
+                    if (!Number.isInteger(count) || count <= 0) {
+                        errors.push("Количество пар для каждого размера должно быть больше нуля.");
+                        break;
+                    }
+                }
+
+                if (errors.length > 0) {
+                    event.preventDefault();
+                    errorBox.textContent = errors[0];
+                }
+            });
+
+            updateIndexes();
+            updateTotal();
+        })();
+    </script>
+}
