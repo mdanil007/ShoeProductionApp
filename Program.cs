@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddRazorPages();
+
 var connectionString = builder.Configuration
     .GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException(
@@ -77,6 +79,60 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider
+        .GetRequiredService<UserManager<ApplicationUser>>();
+
+    var hasUsers = await userManager.Users.AnyAsync();
+
+    if (!hasUsers)
+    {
+        var userName = app.Configuration["InitialAdmin:UserName"];
+        var password = app.Configuration["InitialAdmin:Password"];
+
+        if (string.IsNullOrWhiteSpace(userName) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            throw new InvalidOperationException(
+                "Для создания первого администратора задайте " +
+                "InitialAdmin:UserName и InitialAdmin:Password " +
+                "через User Secrets.");
+        }
+
+        var admin = new ApplicationUser
+        {
+            UserName = userName,
+            IsActive = true
+        };
+
+        var createResult = await userManager.CreateAsync(
+            admin, password);
+
+        if (!createResult.Succeeded)
+        {
+            var errors = string.Join(
+                "; ",
+                createResult.Errors.Select(error => error.Description));
+
+            throw new InvalidOperationException(
+                $"Не удалось создать администратора: {errors}");
+        }
+
+        var roleResult = await userManager.AddToRoleAsync(
+            admin, AppRoles.Administrator);
+
+        if (!roleResult.Succeeded)
+        {
+            var errors = string.Join(
+                "; ",
+                roleResult.Errors.Select(error => error.Description));
+
+            throw new InvalidOperationException(
+                $"Не удалось назначить роль администратора: {errors}");
+        }
+    }
+}
 
 if (!app.Environment.IsDevelopment())
 {
@@ -97,5 +153,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
 
+app.MapRazorPages();
 
 app.Run();
