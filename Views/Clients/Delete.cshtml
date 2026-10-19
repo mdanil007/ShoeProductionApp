@@ -1,0 +1,36 @@
+﻿@model ShoeProductionApp.Entities.Client
+@using ShoeProductionApp.Entities
+@{
+    ViewData["Title"] = "Удаление клиента";
+}
+<h1 class="mb-4">Удаление клиента</h1>
+<div class="alert alert-warning">
+    Вы действительно хотите удалить клиента «@Model.Name»? Это действие нельзя отменить. Если на клиента уже оформлен заказ, система запретит удаление.
+</div>
+<dl class="row">
+    <dt class="col-sm-3">
+        Тип клиента
+    </dt>
+    <dd class="col-sm-9">
+        @(Model.Type == ClientType.Shop ? "Магазин" : "Маркетплейс")
+    </dd>
+    <dt class="col-sm-3">
+        Контактное лицо
+    </dt>
+    <dd class="col-sm-9">
+        @(string.IsNullOrWhiteSpace(Model.ContactPerson) ? "—" : Model.ContactPerson)
+    </dd>
+    <dt class="col-sm-3">
+        Телефон
+    </dt>
+    <dd class="col-sm-9">
+        @(string.IsNullOrWhiteSpace(Model.Phone) ? "—" : Model.Phone)
+    </dd>
+    <dt class="col-sm-3">
+        Электронная почта
+    </dt>
+    <dd class="col-sm-9">
+        @(string.IsNullOrWhiteSpace(Model.Email) ? "—" : Model.Email)
+    </dd>
+</dl>
+<form asp-action="Delete" asp-route-id="@Model.Id" method="post">@Html.AntiForgeryToken()<button type="submit" class="btn btn-danger">Удалить</button> <a asp-action="Index" class="btn btn-outline-secondary">Отмена</a></form>
