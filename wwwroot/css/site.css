@@ -33,3 +33,18 @@ body {
 .user-status-button {
     width: 130px
 }
+
+.client-table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+.client-table th,
+.client-table td {
+    overflow-wrap: anywhere;
+    white-space: normal;
+}
+
+.client-table td.text-nowrap{
+    white-space: nowrap;
+}

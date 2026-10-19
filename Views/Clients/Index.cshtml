@@ -29,25 +29,36 @@
 }
 else
 {
-
     <div class="table-responsive">
-        <table class="table table-striped table-hover align-middle">
+        <table class="table table-striped table-hover align-middle clients-table">
             <thead><tr><th>Название</th><th>Тип</th><th>Контактное лицо</th><th>Телефон</th><th>Электронная почта</th><th>Адрес</th>@if (canManage) {
                 <th class="text-end">Действия</th>
             }
         </tr></thead>
         <tbody>
-            @foreach (var client in Model.Clients)
-            {
-                <tr><td><strong>@client.Name</strong>@if (!string.IsNullOrWhiteSpace(client.Comment)) {
-                    <div class="small text-muted">@client.Comment</div>
+        @foreach (var client in Model.Clients)
+        {
+            <tr>
+                <td class="text-wrap text-break">
+                    <strong>@client.Name</strong>
+                    @if (!string.IsNullOrWhiteSpace(client.Comment)) {
+                        <div class="small text-muted">@client.Comment</div>
+                    }
+                </td>
+                <td>@(client.Type == ClientType.Shop ? "Магазин" : "Маркетплейс")</td>
+                <td class="text-wrap text-break">@(string.IsNullOrWhiteSpace(client.ContactPerson) ? "—" : client.ContactPerson)</td>
+                <td class="text-wrap text-break">@(string.IsNullOrWhiteSpace(client.Phone) ? "—" : client.Phone)</td>
+                <td class="text-wrap text-break">@(string.IsNullOrWhiteSpace(client.Email) ? "—" : client.Email)</td>
+                <td class="text-wrap text-break">@(string.IsNullOrWhiteSpace(client.Address) ? "—" : client.Address)</td>
+                @if (canManage) {
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@client.Id" class="btn btn-sm btn-outline-primary">Изменить</a> 
+                        <a asp-action="Delete" asp-route-id="@client.Id" class="btn btn-sm btn-outline-danger">Удалить</a>
+                    </td>
                 }
-            </td><td>@(client.Type == ClientType.Shop ? "Магазин" : "Маркетплейс")</td><td>@(string.IsNullOrWhiteSpace(client.ContactPerson) ? "—" : client.ContactPerson)</td><td>@(string.IsNullOrWhiteSpace(client.Phone) ? "—" : client.Phone)</td><td>@(string.IsNullOrWhiteSpace(client.Email) ? "—" : client.Email)</td><td>@(string.IsNullOrWhiteSpace(client.Address) ? "—" : client.Address)</td>@if (canManage) {
-            <td class="text-end text-nowrap"><a asp-action="Edit" asp-route-id="@client.Id" class="btn btn-sm btn-outline-primary">Изменить</a> <a asp-action="Delete" asp-route-id="@client.Id" class="btn btn-sm btn-outline-danger">Удалить</a></td>
+            </tr>
         }
-    </tr>
-}
-</tbody>
-</table>
-</div>
+        </tbody>
+        </table>
+    </div>
 }
