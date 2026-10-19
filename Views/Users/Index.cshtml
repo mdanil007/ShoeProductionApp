@@ -55,6 +55,7 @@
                                 }
                             </td>
                             <td class="text-end">
+                                <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-outline-primary me-1">Изменить</a>
                                 <form asp-action="ToggleActive"
                                       method="post"
                                       class="d-inline"
@@ -66,14 +67,14 @@
                                     @if (user.IsActive)
                                     {
                                         <button type="submit"
-                                                class="btn btn-sm btn-outline-danger">
+                                                class="btn btn-sm btn-outline-danger user-status-button">
                                             Заблокировать
                                         </button>
                                     }
                                     else
                                     {
                                         <button type="submit"
-                                                class="btn btn-sm btn-outline-success">
+                                                class="btn btn-sm btn-outline-success user-status-button">
                                             Разблокировать
                                         </button>
                                     }
