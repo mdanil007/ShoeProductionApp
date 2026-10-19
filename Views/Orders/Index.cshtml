@@ -1,4 +1,5 @@
 ﻿@using ShoeProductionApp.Entities
+@using ShoeProductionApp.Extensions
 @model List<ShoeProductionApp.ViewModels.OrderListItemViewModel>
 
 @{
@@ -17,43 +18,85 @@
     <div class="alert alert-danger">@error</div>
 }
 
-<form method="get" asp-action="Index" class="mb-3">
-    <div class="row g-2">
-        <div class="col-md-3">
-            <input type="text" name="search" value="@ViewData["Search"]"
+
+<form method="get" asp-action="Index" class="mb-4">
+    @* Строка поиска *@
+    <div class="row g-2 mb-3">
+        <div class="col-12 col-md-8 col-lg-6">
+            <label for="orderSearch" class="form-label">
+                Поиск заказов
+            </label>
+            <input id="orderSearch"
+                   type="text"
+                   name="search"
+                   value="@ViewData["Search"]"
                    class="form-control"
                    placeholder="Клиент, артикул или номер" />
         </div>
-        <div class="col-md-3">
-            <select name="status" class="form-select">
-                <option value="">Все статусы</option>
+
+        <div class="col-12 col-md-auto d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">
+                Найти
+            </button>
+        </div>
+    </div>
+
+    @* Строка фильтров *@
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-md-4 col-lg-3">
+            <label for="orderStatus" class="form-label">
+                Статус
+            </label>
+            <select id="orderStatus" name="status" class="form-select">
+                <option value=""
+                        selected="@(string.IsNullOrEmpty(ViewData["Status"]?.ToString()))">
+                    Все статусы
+                </option>
+
                 @foreach (var item in Enum.GetValues<OrderStatus>())
                 {
                     <option value="@item"
                             selected="@(ViewData["Status"]?.ToString() == item.ToString())">
-                        @item
+                        @item.ToRussian()
                     </option>
                 }
             </select>
         </div>
-        <div class="col-md-2">
-            <label class="form-label">Плановая дата</label>
-            <input type="date" name="plannedShipmentDate"
+
+        <div class="col-12 col-md-4 col-lg-2">
+            <label for="plannedShipmentDate" class="form-label">
+                Плановая дата
+            </label>
+            <input id="plannedShipmentDate"
+                   type="date"
+                   name="plannedShipmentDate"
                    value="@ViewData["PlannedShipmentDate"]"
                    class="form-control" />
         </div>
-        <div class="col-md-2">
-            <label class="form-label">Фактическая дата</label>
-            <input type="date" name="actualShipmentDate"
+
+        <div class="col-12 col-md-4 col-lg-2">
+            <label for="actualShipmentDate" class="form-label">
+                Фактическая дата
+            </label>
+            <input id="actualShipmentDate"
+                   type="date"
+                   name="actualShipmentDate"
                    value="@ViewData["ActualShipmentDate"]"
                    class="form-control" />
         </div>
-        <div class="col-md-2 d-flex gap-2 align-items-end">
-            <button type="submit" class="btn btn-primary">Найти</button>
-            <a asp-action="Index" class="btn btn-outline-secondary">Сбросить</a>
+
+        <div class="col-12 col-md-auto d-flex gap-2">
+            <button type="submit" class="btn btn-primary">
+                Применить
+            </button>
+
+            <a asp-action="Index" class="btn btn-outline-secondary">
+                Сбросить
+            </a>
         </div>
     </div>
 </form>
+
 
 @if (User.IsInRole("Руководитель") || User.IsInRole("Мастер"))
 {
@@ -82,7 +125,7 @@ else
                         <p class="mb-1">Клиент: @order.ClientName</p>
                         <p class="mb-1">Артикул: @order.Article</p>
                         <p class="mb-1">Количество пар: @order.TotalPairs</p>
-                        <p class="mb-1">Статус: @order.Status</p>
+                        <p class="mb-1">Статус: @order.Status.ToRussian()</p>
                         <p class="mb-1">
                             Плановая отправка:
                             @order.PlannedShipmentDate.ToString("dd.MM.yyyy")
