@@ -37,7 +37,7 @@ public class OrdersController : Controller
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
-                Text = $"{x.Name} ({x.Type})"
+                Text = $"{x.Name} ({(x.Type == ClientType.Shop ? "Магазин" : "Маркетплейс")})"
             })
             .ToList();
 
@@ -51,9 +51,6 @@ public class OrdersController : Controller
             .ToList();
     }
 
-
-    // GET: /Orders
-    // Список доступен всем авторизованным пользователям.
     public async Task<IActionResult> Index(
         string? search,
         OrderStatus? status,
@@ -74,7 +71,6 @@ public class OrdersController : Controller
         return View(orders);
     }
 
-    // GET: /Orders/Details/5
     public async Task<IActionResult> Details(int id)
     {
         try
@@ -104,8 +100,6 @@ public class OrdersController : Controller
     [Authorize(Policy = "CanManageOrders")]
     public async Task<IActionResult> Create(CreateOrderViewModel model)
     {
-        // Пустые строки размеров появляются, если пользователь
-        // добавил строку и не заполнил её.
         model.Sizes = (model.Sizes ?? [])
             .Where(x => !string.IsNullOrWhiteSpace(x.Size))
             .ToList();
@@ -179,8 +173,6 @@ public class OrdersController : Controller
         return View(model);
     }
 
-
-    // POST: /Orders/AdvanceStatus/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Policy = "CanManageOrders")]
@@ -211,7 +203,6 @@ public class OrdersController : Controller
         return RedirectToAction(nameof(Index));
     }
 
-    // POST: /Orders/Cancel/5
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Policy = "CanCancelOrders")]
