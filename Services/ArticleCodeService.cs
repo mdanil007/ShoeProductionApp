@@ -32,13 +32,13 @@ namespace ShoeProductionApp.Services
 
             var articleCode = string.Concat(
                 genderCode,
-                product.Leather,
-                product.Lining,
-                product.Model,
-                product.Model.Color
+                product.Leather.Code,
+                product.Lining.Code,
+                product.Model.Code,
+                product.Model.Color.Code
                 );
 
-            if (articleCode.Length != 6 || articleCode.Any(c => c is < '0' or '9'))
+            if (articleCode.Length != 6 || articleCode.Any(c => c is < '0' or > '9'))
                 throw new InvalidOperationException(
                     "Не удалось сформировать корректный шестизначный артикул");
 
