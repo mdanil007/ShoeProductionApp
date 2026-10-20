@@ -23,8 +23,8 @@
 }
 
 <ul class="nav nav-tabs mb-3">
-    <li class="nav-item"><a class="nav-link @(Model.Tab == "models" ? "active" : "")" asp-action="Index" asp-route-tab="models">Модели</a></li>
     <li class="nav-item"><a class="nav-link @(Model.Tab == "articles" ? "active" : "")" asp-action="Index" asp-route-tab="articles">Артикулы</a></li>
+    <li class="nav-item"><a class="nav-link @(Model.Tab == "models" ? "active" : "")" asp-action="Index" asp-route-tab="models">Модели</a></li>
     <li class="nav-item"><a class="nav-link @(Model.Tab == "colors" ? "active" : "")" asp-action="Index" asp-route-tab="colors">Цвета</a></li>
     <li class="nav-item"><a class="nav-link @(Model.Tab == "leathers" ? "active" : "")" asp-action="Index" asp-route-tab="leathers">Кожа</a></li>
     <li class="nav-item"><a class="nav-link @(Model.Tab == "linings" ? "active" : "")" asp-action="Index" asp-route-tab="linings">Подкладка</a></li>

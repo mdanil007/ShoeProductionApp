@@ -29,7 +29,7 @@ public class ReferenceController : Controller
 
     [HttpGet]
     public async Task<IActionResult> Index(
-        string tab = "models",
+        string tab = "articles",
         string? searchModels = null,
         string? searchArticles = null,
         string? searchColors = null,
