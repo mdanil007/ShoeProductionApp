@@ -48,3 +48,11 @@ body {
 .client-table td.text-nowrap{
     white-space: nowrap;
 }
+
+.site-logo {
+    display: block;
+    max-height: 48px;
+    max-width: 220px;
+    width: auto;
+    object-fit: contain;
+}
