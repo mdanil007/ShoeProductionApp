@@ -12,6 +12,13 @@
         <form method="post"
               asp-route-returnUrl="@Model.ReturnUrl">
 
+            @if (!string.IsNullOrWhiteSpace(Model.SessionMessage))
+            {
+                <div class="alert alert-warning mb-3" role="alert">
+                    @Model.SessionMessage
+                </div>
+            }
+
             <div asp-validation-summary="ModelOnly"
                  class="text-danger mb-3"
                  role="alert"></div>

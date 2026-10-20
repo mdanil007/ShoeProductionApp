@@ -27,6 +27,8 @@ public class LoginModel : PageModel
 
     public string ReturnUrl { get; set; } = "/Orders";
 
+    public string? SessionMessage { get; private set; }
+
     public class InputModel
     {
         [Required(ErrorMessage = "Введите логин.")]
@@ -42,16 +44,26 @@ public class LoginModel : PageModel
         public bool RememberMe { get; set; }
     }
 
-    public IActionResult OnGet(string? returnUrl = null)
+    public IActionResult OnGet(
+        string? returnUrl = null,
+        string? reason = null)
     {
         if (User.Identity?.IsAuthenticated == true)
         {
             return LocalRedirect("/Orders");
         }
 
+        SessionMessage = reason switch
+        {
+            "blocked" => "Ваша учётная запись заблокирована",
+            "changed" => "Ваша учётная запись изменена. Войдите снова",
+            _ => null
+        };
+
         ReturnUrl = GetSafeReturnUrl(returnUrl);
         return Page();
     }
+
 
     public async Task<IActionResult> OnPostAsync(
         string? returnUrl = null)

@@ -252,6 +252,35 @@ public class UsersController : Controller
     private void AddIdentityErrors(IdentityResult result)
     {
         foreach (var error in result.Errors)
-            ModelState.AddModelError(string.Empty, error.Description);
+        {
+            var message = error.Code switch
+            {
+                "DuplicateUserName" =>
+                    "Пользователь с таким логином уже существует.",
+
+                "DuplicateEmail" =>
+                    "Пользователь с таким адресом электронной почты уже существует.",
+
+                "PasswordTooShort" =>
+                    "Пароль слишком короткий.",
+
+                "PasswordRequiresNonAlphanumeric" =>
+                    "Пароль должен содержать хотя бы один специальный символ.",
+
+                "PasswordRequiresDigit" =>
+                    "Пароль должен содержать хотя бы одну цифру.",
+
+                "PasswordRequiresLower" =>
+                    "Пароль должен содержать хотя бы одну строчную букву.",
+
+                "PasswordRequiresUpper" =>
+                    "Пароль должен содержать хотя бы одну заглавную букву.",
+
+                _ => error.Description
+            };
+
+            ModelState.AddModelError(string.Empty, message);
+        }
     }
+
 }

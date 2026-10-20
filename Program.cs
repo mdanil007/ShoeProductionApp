@@ -145,6 +145,9 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAuthentication();
+
+app.UseMiddleware<ShoeProductionApp.Middleware.ActiveUserMiddleware>();
+
 app.UseAuthorization();
 
 app.MapStaticAssets();
