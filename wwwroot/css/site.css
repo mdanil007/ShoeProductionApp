@@ -56,3 +56,164 @@ body {
     width: auto;
     object-fit: contain;
 }
+
+.company-hero {
+    padding: 2.5rem 1rem 3.5rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.company-logo {
+    display: block;
+    width: min(100%, 420px);
+    max-height: 220px;
+    object-fit: contain;
+    margin: 0 auto 1.5rem;
+}
+
+.company-eyebrow {
+    margin-bottom: 0.75rem;
+    color: #666;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+}
+
+.company-hero h1 {
+    margin-bottom: 1rem;
+    color: #171717;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.company-lead {
+    max-width: 650px;
+    margin: 0 auto;
+    color: #555;
+    font-size: 1.15rem;
+    line-height: 1.8;
+}
+
+.company-section {
+    padding: 3.5rem 0;
+}
+
+.company-section-heading {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.company-section h2,
+.company-contacts h2 {
+    margin-bottom: 1.5rem;
+    color: #171717;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+.company-section p,
+.company-direction p {
+    color: #555;
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.company-directions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+    padding-bottom: 3.5rem;
+}
+
+.company-direction {
+    padding: 1.75rem;
+    border: 1px solid #dedede;
+    border-radius: 0.5rem;
+}
+
+    .company-direction h3 {
+        margin-bottom: 0.75rem;
+        color: #222;
+        font-size: 1.3rem;
+        font-weight: 600;
+    }
+
+    .company-direction p {
+        margin-bottom: 0;
+    }
+
+.company-contacts {
+    padding: 3rem 0;
+    border-top: 1px solid #e5e5e5;
+}
+
+.company-contacts-intro {
+    color: #555;
+}
+
+.company-contact-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.company-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 1.25rem;
+    border: 1px solid #dedede;
+    border-radius: 0.5rem;
+}
+
+.company-contact-label {
+    color: #777;
+    font-size: 0.875rem;
+}
+
+.company-contact a {
+    color: #222;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+    text-decoration: none;
+}
+
+    .company-contact a:hover {
+        text-decoration: underline;
+    }
+
+@media (max-width: 767.98px) {
+    .company-hero {
+        padding: 1.5rem 0.5rem 2.5rem;
+    }
+
+    .company-logo {
+        max-height: 160px;
+        margin-bottom: 1.25rem;
+    }
+
+    .company-lead {
+        font-size: 1rem;
+    }
+
+    .company-section {
+        padding: 2.5rem 0;
+    }
+
+    .company-directions {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        padding-bottom: 2.5rem;
+    }
+
+    .company-contact-list {
+        grid-template-columns: 1fr;
+    }
+
+    .company-direction,
+    .company-contact {
+        padding: 1.25rem;
+    }
+}
