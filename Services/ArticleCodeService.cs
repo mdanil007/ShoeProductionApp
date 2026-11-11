@@ -1,48 +1,31 @@
 ﻿using ShoeProductionApp.Entities;
 
-namespace ShoeProductionApp.Services
+namespace ShoeProductionApp.Services;
+
+public class ArticleCodeService
 {
-    public class ArticleCodeService
+    public string BuildArticleCode(Product product)
     {
-        public string BuildArticleCode(Product product)
-        {
-            ArgumentNullException.ThrowIfNull(product);
+        ArgumentNullException.ThrowIfNull(product);
 
-            if (product.Model is null)
-                throw new ArgumentException(
-                    "Для формирования артикула необходимо выбрать модель",
-                    nameof(product));
+        if (!Enum.IsDefined(product.Gender))
+            throw new ArgumentException("Необходимо выбрать допустимый тип обуви.", nameof(product));
 
-            if (product.Model.Color is null)
-                throw new ArgumentException(
-                    "Для формирования артикула необходимо выбрать цвет модели",
-                    nameof(product));
+        if (product.Model is null || product.Color is null || product.Leather is null ||
+            product.Lining is null || product.Sole is null)
+            throw new ArgumentException("Для формирования артикула необходимо выбрать все составляющие.", nameof(product));
 
-            if (product.Leather is null)
-                throw new ArgumentException(
-                    "Для формирования артикула необходимо выбрать кожу",
-                    nameof(product));
+        var code = string.Concat(
+            ((int)product.Gender).ToString(),
+            product.Leather.Code,
+            product.Lining.Code,
+            product.Model.Code,
+            product.Color.Code,
+            product.Sole.Code);
 
-            if (product.Lining is null)
-                throw new ArgumentException(
-                    "Для формирования артикула необходимо выбрать подкладку",
-                    nameof(product));
+        if (code.Length != 11 || code.Any(c => c is < '0' or > '9'))
+            throw new InvalidOperationException("Не удалось сформировать корректный одиннадцатизначный артикул.");
 
-            var genderCode = ((int)product.Gender).ToString();
-
-            var articleCode = string.Concat(
-                genderCode,
-                product.Leather.Code,
-                product.Lining.Code,
-                product.Model.Code,
-                product.Model.Color.Code
-                );
-
-            if (articleCode.Length != 6 || articleCode.Any(c => c is < '0' or > '9'))
-                throw new InvalidOperationException(
-                    "Не удалось сформировать корректный шестизначный артикул");
-
-            return articleCode;
-        }
+        return code;
     }
 }

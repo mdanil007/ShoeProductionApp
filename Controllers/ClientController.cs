@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShoeProductionApp.Entities;
 using ShoeProductionApp.Services;
@@ -6,7 +6,7 @@ using ShoeProductionApp.ViewModels;
 
 namespace ShoeProductionApp.Controllers;
 
-[Authorize(Roles = "Руководитель,Мастер,Менеджер")]
+[Authorize(Roles = "Менеджер,Мастер")]
 public class ClientsController : Controller
 {
     private readonly ClientService _clientService;

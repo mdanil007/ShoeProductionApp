@@ -480,3 +480,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Uploaded article photographs (stored outside wwwroot)
+/App_Data/Uploads/

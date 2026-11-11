@@ -1,4 +1,4 @@
-﻿using ShoeProductionApp.Entities;
+using ShoeProductionApp.Entities;
 using ShoeProductionApp.ViewModel;
 
 namespace ShoeProductionApp.ViewModels;
@@ -7,9 +7,13 @@ public class OrderDetailsViewModel
 {
     public int Id { get; set; }
 
+    public int ProductId { get; set; }
+
     public string ClientName { get; set; } = string.Empty;
 
     public string Article { get; set; } = string.Empty;
+
+    public string? ArticleImageFileName { get; set; }
 
     public string CreatorName { get; set; } = string.Empty;
 

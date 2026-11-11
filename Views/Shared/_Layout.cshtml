@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -29,24 +29,22 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (User.IsInRole("Руководитель") ||
+                        @if (User.IsInRole("Менеджер") ||
                             User.IsInRole("Мастер") ||
-                            User.IsInRole("Менеджер") ||
                             User.IsInRole("Администратор"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Orders" asp-action="Index">Заказы</a>
                             </li>
                         }
-                        @if (User.IsInRole("Руководитель") || User.IsInRole("Мастер") || User.IsInRole("Менеджер"))
+                        @if (User.IsInRole("Менеджер") || User.IsInRole("Мастер"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Clients" asp-action="Index">Клиенты</a>
                             </li>
                         }
-                        @if (User.IsInRole("Руководитель") ||
-                            User.IsInRole("Мастер") ||
-                            User.IsInRole("Менеджер"))
+                        @if (User.IsInRole("Менеджер") ||
+                            User.IsInRole("Мастер"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark"

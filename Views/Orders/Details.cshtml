@@ -1,4 +1,4 @@
-﻿@using ShoeProductionApp.Extensions
+@using ShoeProductionApp.Extensions
 @model ShoeProductionApp.ViewModels.OrderDetailsViewModel
 
 @{
@@ -22,7 +22,17 @@
     <dd class="col-sm-9">@Model.ClientName</dd>
 
     <dt class="col-sm-3">Артикул</dt>
-    <dd class="col-sm-9">@Model.Article</dd>
+    <dd class="col-sm-9">
+        @Model.Article
+        @if (!string.IsNullOrWhiteSpace(Model.ArticleImageFileName))
+        {
+            <div class="mt-2">
+                <button type="button" class="btn p-0 border-0" data-bs-toggle="modal" data-bs-target="#orderArticleImageModal" aria-label="Увеличить фотографию артикула">
+                    <img src="@Url.Action("Get", "ArticleImages", new { id = Model.ProductId })" class="article-thumbnail" alt="Фотография артикула" />
+                </button>
+            </div>
+        }
+    </dd>
 
     <dt class="col-sm-3">Создал</dt>
     <dd class="col-sm-9">@Model.CreatorName</dd>
@@ -98,6 +108,18 @@ else
             }
         </tbody>
     </table>
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.ArticleImageFileName))
+{
+    <div class="modal fade" id="orderArticleImageModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">Фотография артикула</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button></div>
+                <div class="modal-body text-center"><img src="@Url.Action("Get", "ArticleImages", new { id = Model.ProductId })" class="img-fluid" alt="Фотография артикула" /></div>
+            </div>
+        </div>
+    </div>
 }
 
 <a asp-action="Index" class="btn btn-outline-secondary">К списку заказов</a>

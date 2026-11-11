@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using ShoeProductionApp.Data;
 using ShoeProductionApp.Entities;
 using ShoeProductionApp.ViewModel;
@@ -50,9 +50,10 @@ public class OrderService
 
         var product = await _db.Products
             .Include(x => x.Model)
-                .ThenInclude(x => x.Color)
+            .Include(x => x.Color)
             .Include(x => x.Leather)
             .Include(x => x.Lining)
+            .Include(x => x.Sole)
             .SingleOrDefaultAsync(x => x.Id == productId);
 
         if (product is null)
@@ -124,9 +125,10 @@ public class OrderService
             .Include(x => x.Client)
             .Include(x => x.Product)
                 .ThenInclude(x => x.Model)
-                    .ThenInclude(x => x.Color)
+            .Include(x => x.Product.Color)
             .Include(x => x.Product.Leather)
             .Include(x => x.Product.Lining)
+            .Include(x => x.Product.Sole)
             .Include(x => x.Sizes)
             .ToListAsync();
 
@@ -199,9 +201,10 @@ public class OrderService
             .Include(x => x.CreatedByUser)
             .Include(x => x.Product)
                 .ThenInclude(x => x.Model)
-                    .ThenInclude(x => x.Color)
+            .Include(x => x.Product.Color)
             .Include(x => x.Product.Leather)
             .Include(x => x.Product.Lining)
+            .Include(x => x.Product.Sole)
             .Include(x => x.Sizes)
             .Include(x => x.StatusHistory)
                 .ThenInclude(x => x.ChangedByUser)
@@ -211,8 +214,10 @@ public class OrderService
         return new OrderDetailsViewModel
         {
             Id = order.Id,
+            ProductId = order.ProductId,
             ClientName = order.Client.Name,
             Article = _articleCodeService.BuildArticleCode(order.Product),
+            ArticleImageFileName = order.Product.ImageFileName,
             CreatorName = order.CreatedByUser.UserName ?? "Неизвестно",
             CreatedAt = order.CreatedAt,
             PlannedShipmentDate = order.PlannedShipmentDate,

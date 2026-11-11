@@ -1,4 +1,4 @@
-﻿@using ShoeProductionApp.Entities
+@using ShoeProductionApp.Entities
 @using ShoeProductionApp.Extensions
 @model List<ShoeProductionApp.ViewModels.OrderListItemViewModel>
 
@@ -98,7 +98,7 @@
 </form>
 
 
-@if (User.IsInRole("Руководитель") || User.IsInRole("Мастер"))
+@if (User.IsInRole("Менеджер") || User.IsInRole("Мастер"))
 {
     <p>
         <a asp-action="Create" class="btn btn-success">Создать заказ</a>
@@ -144,7 +144,7 @@ else
                             <p class="text-danger fw-bold mb-2">Просрочено</p>
                         }
 
-                        @if (User.IsInRole("Руководитель") ||
+                        @if (User.IsInRole("Менеджер") ||
                              User.IsInRole("Мастер"))
                         {
                             @if (order.Status != OrderStatus.Shipped &&
@@ -160,7 +160,7 @@ else
                             }
                         }
 
-                        @if (User.IsInRole("Руководитель") &&
+                        @if (User.IsInRole("Менеджер") &&
                              order.Status != OrderStatus.Shipped &&
                              order.Status != OrderStatus.Cancelled)
                         {

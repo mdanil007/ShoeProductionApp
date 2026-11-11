@@ -101,12 +101,10 @@ namespace ShoeProductionApp.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("text");
@@ -143,12 +141,10 @@ namespace ShoeProductionApp.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("character varying(128)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Value")
                         .HasColumnType("text");
@@ -270,8 +266,8 @@ namespace ShoeProductionApp.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(1)
-                        .HasColumnType("character varying(1)");
+                        .HasMaxLength(2)
+                        .HasColumnType("character varying(2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -284,7 +280,7 @@ namespace ShoeProductionApp.Migrations
 
                     b.ToTable("Colors", t =>
                         {
-                            t.HasCheckConstraint("CK_Color_Code", "\"Code\" ~ '^[0-9]$'");
+                            t.HasCheckConstraint("CK_Color_Code", "\"Code\" ~ '^[0-9]{2}$'");
                         });
                 });
 
@@ -312,7 +308,7 @@ namespace ShoeProductionApp.Migrations
 
                     b.ToTable("Leathers", t =>
                         {
-                            t.HasCheckConstraint("CK_Leather_Code", "\"Code\" ~ '^[0-9]$'");
+                            t.HasCheckConstraint("CK_Leather_Code", "\"Code\" ~ '^[0-9]{1}$'");
                         });
                 });
 
@@ -340,7 +336,7 @@ namespace ShoeProductionApp.Migrations
 
                     b.ToTable("Linings", t =>
                         {
-                            t.HasCheckConstraint("CK_Lining_Code", "\"Code\" ~ '^[0-9]$'");
+                            t.HasCheckConstraint("CK_Lining_Code", "\"Code\" ~ '^[0-9]{1}$'");
                         });
                 });
 
@@ -354,11 +350,8 @@ namespace ShoeProductionApp.Migrations
 
                     b.Property<string>("Code")
                         .IsRequired()
-                        .HasMaxLength(2)
-                        .HasColumnType("character varying(2)");
-
-                    b.Property<int>("ColorId")
-                        .HasColumnType("integer");
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -366,14 +359,12 @@ namespace ShoeProductionApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColorId");
-
-                    b.HasIndex("Code", "ColorId")
+                    b.HasIndex("Code")
                         .IsUnique();
 
                     b.ToTable("Models", t =>
                         {
-                            t.HasCheckConstraint("CK_Model_Code", "\"Code\" ~ '^[0-9]{2}$'");
+                            t.HasCheckConstraint("CK_Model_Code", "\"Code\" ~ '^[0-9]{3}$'");
                         });
                 });
 
@@ -481,8 +472,15 @@ namespace ShoeProductionApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ColorId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("Gender")
                         .HasColumnType("integer");
+
+                    b.Property<string>("ImageFileName")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("LeatherId")
                         .HasColumnType("integer");
@@ -493,7 +491,12 @@ namespace ShoeProductionApp.Migrations
                     b.Property<int>("ModelId")
                         .HasColumnType("integer");
 
+                    b.Property<int>("SoleId")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ColorId");
 
                     b.HasIndex("LeatherId");
 
@@ -501,12 +504,42 @@ namespace ShoeProductionApp.Migrations
 
                     b.HasIndex("ModelId");
 
-                    b.HasIndex("Gender", "LeatherId", "LiningId", "ModelId")
+                    b.HasIndex("SoleId");
+
+                    b.HasIndex("Gender", "ModelId", "ColorId", "LeatherId", "LiningId", "SoleId")
                         .IsUnique();
 
                     b.ToTable("Products", t =>
                         {
-                            t.HasCheckConstraint("CK_Product_Gender", "\"Gender\" IN (8, 9)");
+                            t.HasCheckConstraint("CK_Product_Gender", "\"Gender\" IN (6, 7, 8, 9)");
+                        });
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Sole", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(3)
+                        .HasColumnType("character varying(3)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Soles", t =>
+                        {
+                            t.HasCheckConstraint("CK_Sole_Code", "\"Code\" ~ '^[0-9]{3}$'");
                         });
                 });
 
@@ -559,17 +592,6 @@ namespace ShoeProductionApp.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ShoeProductionApp.Entities.Model", b =>
-                {
-                    b.HasOne("ShoeProductionApp.Entities.Color", "Color")
-                        .WithMany("Models")
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("ShoeProductionApp.Entities.Order", b =>
@@ -631,6 +653,12 @@ namespace ShoeProductionApp.Migrations
 
             modelBuilder.Entity("ShoeProductionApp.Entities.Product", b =>
                 {
+                    b.HasOne("ShoeProductionApp.Entities.Color", "Color")
+                        .WithMany("Products")
+                        .HasForeignKey("ColorId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ShoeProductionApp.Entities.Leather", "Leather")
                         .WithMany("Products")
                         .HasForeignKey("LeatherId")
@@ -649,11 +677,21 @@ namespace ShoeProductionApp.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("ShoeProductionApp.Entities.Sole", "Sole")
+                        .WithMany("Products")
+                        .HasForeignKey("SoleId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Color");
+
                     b.Navigation("Leather");
 
                     b.Navigation("Lining");
 
                     b.Navigation("Model");
+
+                    b.Navigation("Sole");
                 });
 
             modelBuilder.Entity("ShoeProductionApp.Entities.Client", b =>
@@ -663,7 +701,7 @@ namespace ShoeProductionApp.Migrations
 
             modelBuilder.Entity("ShoeProductionApp.Entities.Color", b =>
                 {
-                    b.Navigation("Models");
+                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("ShoeProductionApp.Entities.Leather", b =>
@@ -691,6 +729,11 @@ namespace ShoeProductionApp.Migrations
             modelBuilder.Entity("ShoeProductionApp.Entities.Product", b =>
                 {
                     b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("ShoeProductionApp.Entities.Sole", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

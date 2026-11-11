@@ -1,8 +1,9 @@
-﻿namespace ShoeProductionApp.Entities
+﻿namespace ShoeProductionApp.Entities;
+
+public enum Gender
 {
-    public enum Gender
-    {
-        Female = 8,
-        Male = 9
-    }
+    Female = 8,
+    Male = 9,
+    FemaleXl = 6,
+    MaleXl = 7
 }

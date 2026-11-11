@@ -30,6 +30,7 @@ builder.Services
 
 builder.Services.AddScoped<ArticleCodeService>();
 builder.Services.AddScoped<ProductService>();
+builder.Services.AddSingleton<ArticleImageStorageService>();
 builder.Services.AddScoped<ReferenceDataService>();
 builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<OrderService>();

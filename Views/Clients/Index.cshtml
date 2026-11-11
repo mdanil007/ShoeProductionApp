@@ -1,7 +1,7 @@
-﻿@model ShoeProductionApp.ViewModels.ClientIndexViewModel
+@model ShoeProductionApp.ViewModels.ClientIndexViewModel
 @using ShoeProductionApp.Entities
 @{
-    ViewData["Title"] = "Клиенты"; var canManage = User.IsInRole("Руководитель");
+    ViewData["Title"] = "Клиенты"; var canManage = User.IsInRole("Менеджер");
 }
 <h1 class="mb-4">Клиенты</h1>
 @if (TempData["SuccessMessage"] is string successMessage)

@@ -1,18 +1,15 @@
-﻿
 namespace ShoeProductionApp.Authorization;
 
 public static class AppRoles
 {
-    public const string Manager = "Руководитель";
+    public const string Manager = "Менеджер";
     public const string Master = "Мастер";
-    public const string Viewer = "Менеджер";
     public const string Administrator = "Администратор";
 
     public static readonly string[] All =
     [
         Manager,
         Master,
-        Viewer,
         Administrator
     ];
 
