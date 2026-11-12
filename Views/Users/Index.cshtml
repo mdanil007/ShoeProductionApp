@@ -1,12 +1,12 @@
-﻿@model List<ShoeProductionApp.ViewModels.UserListItemViewModel>
+@model List<ShoeProductionApp.ViewModels.UserListItemViewModel>
 
 @{
     ViewData["Title"] = "Пользователи";
 }
 
-<div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">Пользователи</h1>
+<div class="users-page">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+        <h1 class="mb-0">Пользователи</h1>
         <a asp-action="Create" class="btn btn-primary">
             Создать пользователя
         </a>
