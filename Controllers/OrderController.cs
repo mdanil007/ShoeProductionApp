@@ -1,4 +1,4 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -37,7 +37,7 @@ public class OrdersController : Controller
             .Select(x => new SelectListItem
             {
                 Value = x.Id.ToString(),
-                Text = $"{x.Name} ({(x.Type == ClientType.Shop ? "Магазин" : "Маркетплейс")})"
+                Text = $"{x.Name} ({(x.Type switch { ClientType.Shop => "Магазин", ClientType.Marketplace => "Маркетплейс", ClientType.Individual => "Частное лицо", _ => "Неизвестно" })})"
             })
             .ToList();
 

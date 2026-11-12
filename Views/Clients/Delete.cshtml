@@ -1,4 +1,4 @@
-﻿@model ShoeProductionApp.Entities.Client
+@model ShoeProductionApp.Entities.Client
 @using ShoeProductionApp.Entities
 @{
     ViewData["Title"] = "Удаление клиента";
@@ -12,7 +12,7 @@
         Тип клиента
     </dt>
     <dd class="col-sm-9">
-        @(Model.Type == ClientType.Shop ? "Магазин" : "Маркетплейс")
+        @(Model.Type switch { ClientType.Shop => "Магазин", ClientType.Marketplace => "Маркетплейс", ClientType.Individual => "Частное лицо", _ => "Неизвестно" })
     </dd>
     <dt class="col-sm-3">
         Контактное лицо

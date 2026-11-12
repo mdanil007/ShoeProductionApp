@@ -5,7 +5,7 @@
     ViewData["Title"] = $"Заказ №{Model.Id}";
 }
 
-<h1>Заказ №@Model.Id</h1>
+<h1 class="mb-4">Заказ №@Model.Id</h1>
 
 @if (TempData["SuccessMessage"] is string success)
 {
@@ -17,97 +17,89 @@
     <div class="alert alert-danger">@error</div>
 }
 
-<dl class="row">
-    <dt class="col-sm-3">Клиент</dt>
-    <dd class="col-sm-9">@Model.ClientName</dd>
+<div class="row g-4 align-items-start order-details-overview">
+    <div class="col-12 @(string.IsNullOrWhiteSpace(Model.ArticleImageFileName) ? "col-lg-12" : "col-lg-7")">
+        <dl class="row mb-0 order-details-list">
+            <dt class="col-sm-4">Клиент</dt>
+            <dd class="col-sm-8">@Model.ClientName</dd>
 
-    <dt class="col-sm-3">Артикул</dt>
-    <dd class="col-sm-9">
-        @Model.Article
-        @if (!string.IsNullOrWhiteSpace(Model.ArticleImageFileName))
-        {
-            <div class="mt-2">
-                <button type="button" class="btn p-0 border-0" data-bs-toggle="modal" data-bs-target="#orderArticleImageModal" aria-label="Увеличить фотографию артикула">
-                    <img src="@Url.Action("Get", "ArticleImages", new { id = Model.ProductId })" class="article-thumbnail" alt="Фотография артикула" />
+            <dt class="col-sm-4">Артикул</dt>
+            <dd class="col-sm-8">@Model.Article</dd>
+
+            <dt class="col-sm-4">Создал</dt>
+            <dd class="col-sm-8">@Model.CreatorName</dd>
+
+            <dt class="col-sm-4">Дата создания</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+
+            <dt class="col-sm-4">Плановая отправка</dt>
+            <dd class="col-sm-8">@Model.PlannedShipmentDate.ToString("dd.MM.yyyy")</dd>
+
+            @if (Model.ActualShipmentDate.HasValue)
+            {
+                <dt class="col-sm-4">Фактическая отправка</dt>
+                <dd class="col-sm-8">@Model.ActualShipmentDate.Value.ToString("dd.MM.yyyy HH:mm")</dd>
+            }
+
+            <dt class="col-sm-4">Статус</dt>
+            <dd class="col-sm-8">@Model.Status.ToRussian()</dd>
+
+            <dt class="col-sm-4">Общее количество</dt>
+            <dd class="col-sm-8">@Model.TotalPairs пар</dd>
+
+            <dt class="col-sm-4">Комментарий</dt>
+            <dd class="col-sm-8">@(Model.Comment ?? "—")</dd>
+        </dl>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.ArticleImageFileName))
+    {
+        <div class="col-12 col-lg-5">
+            <div class="order-article-photo-card">
+                <div class="order-article-photo-heading">Фотография артикула</div>
+                <button type="button" class="order-article-photo-button" data-bs-toggle="modal" data-bs-target="#orderArticleImageModal" aria-label="Увеличить фотографию артикула">
+                    <img src="@Url.Action("Get", "ArticleImages", new { id = Model.ProductId })" class="order-article-photo" alt="Фотография артикула @Model.Article" />
                 </button>
             </div>
-        }
-    </dd>
-
-    <dt class="col-sm-3">Создал</dt>
-    <dd class="col-sm-9">@Model.CreatorName</dd>
-
-    <dt class="col-sm-3">Дата создания</dt>
-    <dd class="col-sm-9">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
-
-    <dt class="col-sm-3">Плановая отправка</dt>
-    <dd class="col-sm-9">@Model.PlannedShipmentDate.ToString("dd.MM.yyyy")</dd>
-
-    @if (Model.ActualShipmentDate.HasValue)
-    {
-        <dt class="col-sm-3">Фактическая отправка</dt>
-        <dd class="col-sm-9">
-            @Model.ActualShipmentDate.Value.ToString("dd.MM.yyyy HH:mm")
-        </dd>
+        </div>
     }
+</div>
 
-    <dt class="col-sm-3">Статус</dt>
-    <dd class="col-sm-9">@Model.Status.ToRussian()</dd>
-
-    <dt class="col-sm-3">Общее количество</dt>
-    <dd class="col-sm-9">@Model.TotalPairs пар</dd>
-
-    <dt class="col-sm-3">Комментарий</dt>
-    <dd class="col-sm-9">@(Model.Comment ?? "—")</dd>
-</dl>
-
-<h2>Размеры</h2>
-
-<table class="table">
+<h2 class="h4 mt-4">Размеры</h2>
+<table class="table table-striped align-middle order-details-table">
     <thead>
-        <tr>
-            <th>Размер</th>
-            <th>Количество пар</th>
-        </tr>
+        <tr><th>Размер</th><th>Количество пар</th></tr>
     </thead>
     <tbody>
         @foreach (var size in Model.Sizes)
         {
-            <tr>
-                <td>@size.Size</td>
-                <td>@size.Count</td>
-            </tr>
+            <tr><td>@size.Size</td><td>@size.Count</td></tr>
         }
     </tbody>
 </table>
 
-<h2>История статусов</h2>
-
+<h2 class="h4 mt-4">История статусов</h2>
 @if (Model.StatusHistory.Count == 0)
 {
     <p class="text-muted">История отсутствует.</p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Статус</th>
-                <th>Дата и время</th>
-                <th>Пользователь</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.StatusHistory)
-            {
-                <tr>
-                    <td>@item.Status.ToRussian()</td>
-                    <td>@item.ChangedAt.ToString("dd.MM.yyyy HH:mm")</td>
-                    <td>@item.ChangedByUserName</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Статус</th><th>Дата и время</th><th>Пользователь</th></tr></thead>
+            <tbody>
+                @foreach (var item in Model.StatusHistory)
+                {
+                    <tr>
+                        <td>@item.Status.ToRussian()</td>
+                        <td>@item.ChangedAt.ToString("dd.MM.yyyy HH:mm")</td>
+                        <td>@item.ChangedByUserName</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @if (!string.IsNullOrWhiteSpace(Model.ArticleImageFileName))
@@ -115,8 +107,13 @@ else
     <div class="modal fade" id="orderArticleImageModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
-                <div class="modal-header"><h5 class="modal-title">Фотография артикула</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button></div>
-                <div class="modal-body text-center"><img src="@Url.Action("Get", "ArticleImages", new { id = Model.ProductId })" class="img-fluid" alt="Фотография артикула" /></div>
+                <div class="modal-header">
+                    <h5 class="modal-title">Фотография артикула</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img src="@Url.Action("Get", "ArticleImages", new { id = Model.ProductId })" class="img-fluid" alt="Фотография артикула @Model.Article" />
+                </div>
             </div>
         </div>
     </div>

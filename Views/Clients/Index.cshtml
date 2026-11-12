@@ -3,7 +3,13 @@
 @{
     ViewData["Title"] = "Клиенты"; var canManage = User.IsInRole("Менеджер");
 }
-<h1 class="mb-4">Клиенты</h1>
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
+    <h1 class="mb-0">Клиенты</h1>
+    @if (canManage)
+    {
+        <a asp-action="Create" class="btn btn-primary">Добавить клиента</a>
+    }
+</div>
 @if (TempData["SuccessMessage"] is string successMessage)
 {
     <div class="alert alert-success" role="alert">@successMessage</div>
@@ -12,17 +18,14 @@
 {
     <div class="alert alert-danger" role="alert">@errorMessage</div>
 }
-<div class="d-flex justify-content-between align-items-center mb-3"><p class="text-muted mb-0">Всего клиентов: @Model.Clients.Count</p>@if (canManage) {
-    <a asp-action="Create" class="btn btn-primary">Добавить клиента</a>
-}
-</div>
 <form asp-action="Index" method="get" class="card card-body mb-4">
     <div class="row g-3 align-items-end">
         <div class="col-md-6"><label for="search" class="form-label">Поиск</label><input id="search" name="search" value="@Model.Search" class="form-control" placeholder="Название, контакт, телефон, email или адрес" /></div>
-        <div class="col-md-3"><label for="type" class="form-label">Тип клиента</label><select id="type" name="type" class="form-select"><option value="">Все типы</option><option value="Shop" selected="@(Model.Type == ClientType.Shop)">Магазин</option><option value="Marketplace" selected="@(Model.Type == ClientType.Marketplace)">Маркетплейс</option></select></div>
+        <div class="col-md-3"><label for="type" class="form-label">Тип клиента</label><select id="type" name="type" class="form-select"><option value="">Все типы</option><option value="Shop" selected="@(Model.Type == ClientType.Shop)">Магазин</option><option value="Marketplace" selected="@(Model.Type == ClientType.Marketplace)">Маркетплейс</option><option value="Individual" selected="@(Model.Type == ClientType.Individual)">Частное лицо</option></select></div>
         <div class="col-md-3 d-flex gap-2"><button type="submit" class="btn btn-outline-primary">Найти</button><a asp-action="Index" class="btn btn-outline-secondary">Сбросить</a></div>
     </div>
 </form>
+<p class="text-muted mb-3">Всего клиентов: @Model.Clients.Count</p>
 @if (Model.Clients.Count == 0)
 {
     <div class="text-muted py-4">Клиенты не найдены.</div>
@@ -45,7 +48,7 @@ else
                         <div class="small text-muted">@client.Comment</div>
                     }
                 </td>
-                <td>@(client.Type == ClientType.Shop ? "Магазин" : "Маркетплейс")</td>
+                <td>@(client.Type switch { ClientType.Shop => "Магазин", ClientType.Marketplace => "Маркетплейс", ClientType.Individual => "Частное лицо", _ => "Неизвестно" })</td>
                 <td class="text-wrap text-break">@(string.IsNullOrWhiteSpace(client.ContactPerson) ? "—" : client.ContactPerson)</td>
                 <td class="text-wrap text-break">@(string.IsNullOrWhiteSpace(client.Phone) ? "—" : client.Phone)</td>
                 <td class="text-wrap text-break">@(string.IsNullOrWhiteSpace(client.Email) ? "—" : client.Email)</td>

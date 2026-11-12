@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using ShoeProductionApp.Entities;
 namespace ShoeProductionApp.ViewModels;
 
@@ -8,7 +8,7 @@ public class ClientFormViewModel
     public string PageTitle { get; set; } = "Клиент";
     [Required(ErrorMessage = "Введите название клиента.")]
     [StringLength(200, ErrorMessage = "Название не должно превышать 200 символов.")]
-    [Display(Name = "Название клиента")]
+    [Display(Name = "Название / ФИО")]
     public string Name { get; set; } = string.Empty;
     [EnumDataType(typeof(ClientType), ErrorMessage = "Выберите корректный тип клиента.")]
     [Display(Name = "Тип клиента")]

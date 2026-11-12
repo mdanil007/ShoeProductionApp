@@ -6,7 +6,13 @@
     ViewData["Title"] = "Заказы";
 }
 
-<h1>Заказы</h1>
+<div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
+    <h1 class="mb-0">Заказы</h1>
+    @if (User.IsInRole("Менеджер") || User.IsInRole("Мастер") || User.IsInRole("Администратор"))
+    {
+        <a asp-action="Create" class="btn btn-primary">Создать заказ</a>
+    }
+</div>
 
 @if (TempData["SuccessMessage"] is string success)
 {
@@ -19,7 +25,7 @@
 }
 
 
-<form method="get" asp-action="Index" class="mb-4">
+<form method="get" asp-action="Index" class="card card-body mb-4 order-search-panel">
     @* Строка поиска *@
     <div class="row g-2 mb-3">
         <div class="col-12 col-md-8 col-lg-6">
@@ -97,13 +103,6 @@
     </div>
 </form>
 
-
-@if (User.IsInRole("Менеджер") || User.IsInRole("Мастер"))
-{
-    <p>
-        <a asp-action="Create" class="btn btn-success">Создать заказ</a>
-    </p>
-}
 
 @if (Model.Count == 0)
 {

@@ -1,4 +1,4 @@
-﻿@model ShoeProductionApp.ViewModels.ClientFormViewModel
+@model ShoeProductionApp.ViewModels.ClientFormViewModel
 @using ShoeProductionApp.Entities
 @{
     ViewData["Title"] = Model.PageTitle; var isEdit = Model.Id != 0;
@@ -10,7 +10,7 @@
     <input asp-for="Id" type="hidden" />
 }
 <div class="mb-3"><label asp-for="Name" class="form-label"></label><input asp-for="Name" class="form-control" /><span asp-validation-for="Name" class="text-danger"></span></div>
-<div class="mb-3"><label asp-for="Type" class="form-label"></label><select asp-for="Type" class="form-select"><option value="0">Магазин</option><option value="1">Маркетплейс</option></select><span asp-validation-for="Type" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Type" class="form-label"></label><select asp-for="Type" class="form-select"><option value="0">Магазин</option><option value="1">Маркетплейс</option><option value="2">Частное лицо</option></select><span asp-validation-for="Type" class="text-danger"></span></div>
 <div class="mb-3"><label asp-for="ContactPerson" class="form-label"></label><input asp-for="ContactPerson" class="form-control" /><span asp-validation-for="ContactPerson" class="text-danger"></span></div>
 <div class="mb-3"><label asp-for="Phone" class="form-label"></label><input asp-for="Phone" class="form-control" /><span asp-validation-for="Phone" class="text-danger"></span></div>
 <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" /><span asp-validation-for="Email" class="text-danger"></span></div>
