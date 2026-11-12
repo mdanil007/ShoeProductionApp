@@ -1,73 +1,111 @@
-﻿@{
+@{
     ViewData["Title"] = "Belav man's footwear";
 }
 
-<section class="company-hero text-center">
-    <img src="~/images/logo.png"
-         alt="Belav man's footwear"
-         class="company-logo" />
-
-    <p class="company-eyebrow">BELAV MAN'S FOOTWEAR</p>
-
-    <h1>Обувь для вашего бизнеса</h1>
-
-    <p class="company-lead">
-        Производство мужской обуви для магазинов и оптовых партнёров.
-    </p>
-</section>
-
-<section class="company-section">
-    <div class="company-section-heading">
-        <h2>О компании</h2>
-        <p>
-            Belav man's footwear — производитель мужской обуви,
-            ориентированный на сотрудничество с магазинами и оптовыми
-            покупателями.
-        </p>
-        <p>
-            Мы стремимся выстраивать долгосрочные партнёрские отношения
-            и предлагать решения, отвечающие потребностям наших клиентов.
-        </p>
-    </div>
-</section>
-
-<section class="company-directions">
-    <div class="company-direction">
-        <h3>Для магазинов</h3>
-        <p>
-            Сотрудничество с розничными магазинами и торговыми партнёрами.
-        </p>
-    </div>
-
-    <div class="company-direction">
-        <h3>Оптовые поставки</h3>
-        <p>
-            Работа с оптовыми покупателями, заинтересованными
-            в поставках мужской обуви.
-        </p>
-    </div>
-</section>
-
-<section class="company-contacts">
-    <h2>Контакты</h2>
-    <p class="company-contacts-intro">
-        Свяжитесь с нами по указанным контактам.
-    </p>
-
-    <div class="company-contact-list">
-        <div class="company-contact">
-            <span class="company-contact-label">Телефон</span>
-            <a href="tel:+79990000000">+7 999 000-00-00</a>
+<div class="home-page">
+    <section class="about-section" id="about">
+        <div class="about-inner">
+            <div class="about-image-wrap">
+                <img src="~/images/company-workshop.jpg" alt="Мастер за работой в обувном производстве" class="about-image" />
+            </div>
+            <div class="about-content">
+                <span class="section-kicker">BELAV MAN'S FOOTWEAR</span>
+                <h1>О компании</h1>
+                <p>
+                    Belav man's footwear — производство мужской обуви для магазинов и оптовых партнёров.
+                    Мы объединяем внимание к деталям, опыт мастеров и современные производственные процессы.
+                </p>
+                <p>
+                    Наша задача — создавать качественную и удобную обувь, а также выстраивать надёжное
+                    и долгосрочное сотрудничество с каждым клиентом.
+                </p>
+            </div>
         </div>
+    </section>
 
-        <div class="company-contact">
-            <span class="company-contact-label">Телефон</span>
-            <a href="tel:+79990000001">+7 999 000-00-01</a>
+    <section class="production-section" aria-label="Фотографии производства">
+        <div class="section-heading">
+            <span class="section-kicker">ЗА КАЖДОЙ ПАРОЙ — МАСТЕРСТВО</span>
+            <h2>Наше производство</h2>
         </div>
+        <div class="production-carousel" data-carousel>
+            <div class="carousel-track" aria-live="polite">
+                <div class="carousel-slide is-active">
+                    <img src="~/images/production/production-01.jpg" alt="Работа на швейном оборудовании" />
+                </div>
+                <div class="carousel-slide">
+                    <img src="~/images/production/production-02.jpg" alt="Ручная работа с кожей и обувной заготовкой" />
+                </div>
+                <div class="carousel-slide">
+                    <img src="~/images/production/production-03.jpg" alt="Обработка кожаной обуви" />
+                </div>
+                <div class="carousel-slide">
+                    <img src="~/images/production/production-04.jpg" alt="Финишная обработка мужской обуви" />
+                </div>
+                <div class="carousel-slide">
+                    <img src="~/images/production/production-05.jpg" alt="Ручное сшивание деталей обуви" />
+                </div>
+            </div>
+            <button class="carousel-control carousel-prev" type="button" aria-label="Предыдущее фото" data-carousel-prev>
+                <span aria-hidden="true">‹</span>
+            </button>
+            <button class="carousel-control carousel-next" type="button" aria-label="Следующее фото" data-carousel-next>
+                <span aria-hidden="true">›</span>
+            </button>
+            <div class="carousel-indicators" aria-label="Выбрать фотографию">
+                <button type="button" class="is-active" aria-label="Фото 1" aria-current="true" data-carousel-to="0"></button>
+                <button type="button" aria-label="Фото 2" data-carousel-to="1"></button>
+                <button type="button" aria-label="Фото 3" data-carousel-to="2"></button>
+                <button type="button" aria-label="Фото 4" data-carousel-to="3"></button>
+                <button type="button" aria-label="Фото 5" data-carousel-to="4"></button>
+            </div>
+        </div>
+    </section>
 
-        <div class="company-contact">
-            <span class="company-contact-label">Электронная почта</span>
-            <a href="mailto:info@example.com">info@example.com</a>
+    <section class="contacts-section" id="contacts">
+        <div class="contacts-inner">
+            <div class="contacts-info">
+                <span class="section-kicker">БУДЕМ РАДЫ СОТРУДНИЧЕСТВУ</span>
+                <h2>Контакты</h2>
+                <p class="contacts-description">Свяжитесь с нами удобным способом или оставьте сообщение через форму.</p>
+                <div class="contact-items">
+                    <a class="contact-item" href="tel:+79990000000">
+                        <span class="contact-icon" aria-hidden="true">☎</span>
+                        <span>+7 999 000-00-00</span>
+                    </a>
+                    <a class="contact-item" href="tel:+79990000001">
+                        <span class="contact-icon" aria-hidden="true">☎</span>
+                        <span>+7 999 000-00-01</span>
+                    </a>
+                    <a class="contact-item" href="mailto:info@example.com">
+                        <span class="contact-icon" aria-hidden="true">✉</span>
+                        <span>info@example.com</span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="feedback-card">
+                <h3>Напишите нам</h3>
+                <p>Или заполните форму обратной связи</p>
+                <form id="feedbackForm" novalidate>
+                    <div class="feedback-field">
+                        <label for="feedbackName">Имя <span>*</span></label>
+                        <input id="feedbackName" name="name" type="text" class="form-control" placeholder="Введите ваше имя" required maxlength="100" />
+                        <span class="field-error" data-error-for="feedbackName"></span>
+                    </div>
+                    <div class="feedback-field">
+                        <label for="feedbackEmail">Email <span>*</span></label>
+                        <input id="feedbackEmail" name="email" type="email" class="form-control" placeholder="Введите ваш email" required maxlength="254" />
+                        <span class="field-error" data-error-for="feedbackEmail"></span>
+                    </div>
+                    <div class="feedback-field">
+                        <label for="feedbackMessage">Сообщение</label>
+                        <textarea id="feedbackMessage" name="message" class="form-control" rows="4" placeholder="Введите сообщение" maxlength="2000"></textarea>
+                    </div>
+                    <button type="submit" class="btn feedback-submit">Отправить <span aria-hidden="true">→</span></button>
+                    <div class="feedback-notice" id="feedbackNotice" role="status" aria-live="polite"></div>
+                </form>
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</div>
