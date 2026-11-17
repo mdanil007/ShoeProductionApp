@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using ShoeProductionApp.Entities;
+using ShoeProductionApp.Authorization;
 
 namespace ShoeProductionApp.Areas.Identity.Pages.Account;
 
@@ -50,7 +51,7 @@ public class LoginModel : PageModel
     {
         if (User.Identity?.IsAuthenticated == true)
         {
-            return LocalRedirect("/Orders");
+            return LocalRedirect(GetDefaultRedirectUrl(User));
         }
 
         SessionMessage = reason switch
@@ -104,6 +105,11 @@ public class LoginModel : PageModel
 
         if (result.Succeeded)
         {
+            if (await _userManager.IsInRoleAsync(user, AppRoles.Administrator))
+            {
+                return LocalRedirect("/Users");
+            }
+
             return LocalRedirect(ReturnUrl);
         }
 
@@ -121,6 +127,13 @@ public class LoginModel : PageModel
             "Неверный логин или пароль.");
 
         return Page();
+    }
+
+    private string GetDefaultRedirectUrl(System.Security.Claims.ClaimsPrincipal principal)
+    {
+        return principal.IsInRole(AppRoles.Administrator)
+            ? "/Users"
+            : "/Orders";
     }
 
     private string GetSafeReturnUrl(string? returnUrl)

@@ -13,7 +13,9 @@ public static class AppRoles
         Administrator
     ];
 
-    public const string CanManageOrders = Manager + "," + Master;
+    public const string CanViewOrders = Manager + "," + Master;
+    public const string CanCreateOrders = Manager + "," + Master;
+    public const string CanAdvanceOrders = Master;
     public const string CanCancelOrders = Manager;
     public const string CanManageClients = Manager;
     public const string CanManageReferenceData = Manager + "," + Master;

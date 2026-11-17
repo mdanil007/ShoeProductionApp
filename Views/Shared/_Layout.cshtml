@@ -27,7 +27,7 @@
                 </button>
                 <div class="navbar-collapse collapse" id="mainNavbar">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        @if (User.IsInRole("Менеджер") || User.IsInRole("Мастер") || User.IsInRole("Администратор"))
+                        @if (User.IsInRole("Менеджер") || User.IsInRole("Мастер"))
                         {
                             <li class="nav-item"><a class="nav-link" asp-controller="Orders" asp-action="Index">Заказы</a></li>
                         }

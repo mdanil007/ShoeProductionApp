@@ -36,8 +36,14 @@ builder.Services.AddScoped<ClientService>();
 builder.Services.AddScoped<OrderService>();
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("CanManageOrders", policy =>
+    options.AddPolicy("CanViewOrders", policy =>
         policy.RequireRole(AppRoles.Manager, AppRoles.Master));
+
+    options.AddPolicy("CanCreateOrders", policy =>
+        policy.RequireRole(AppRoles.Manager, AppRoles.Master));
+
+    options.AddPolicy("CanAdvanceOrders", policy =>
+        policy.RequireRole(AppRoles.Master));
 
     options.AddPolicy("CanCancelOrders", policy =>
         policy.RequireRole(AppRoles.Manager));

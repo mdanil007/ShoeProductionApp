@@ -6,7 +6,7 @@ using ShoeProductionApp.Data;
 
 namespace ShoeProductionApp.Controllers;
 
-[Authorize]
+[Authorize(Roles = "Менеджер,Мастер")]
 [Route("article-images")]
 public class ArticleImagesController(ApplicationDbContext db, IWebHostEnvironment environment) : Controller
 {

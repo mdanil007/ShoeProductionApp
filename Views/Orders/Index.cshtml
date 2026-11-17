@@ -8,7 +8,7 @@
 
 <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
     <h1 class="mb-0">Заказы</h1>
-    @if (User.IsInRole("Менеджер") || User.IsInRole("Мастер") || User.IsInRole("Администратор"))
+    @if (User.IsInRole("Менеджер") || User.IsInRole("Мастер"))
     {
         <a asp-action="Create" class="btn btn-primary">Создать заказ</a>
     }
@@ -143,8 +143,7 @@ else
                             <p class="text-danger fw-bold mb-2">Просрочено</p>
                         }
 
-                        @if (User.IsInRole("Менеджер") ||
-                             User.IsInRole("Мастер"))
+                        @if (User.IsInRole("Мастер"))
                         {
                             @if (order.Status != OrderStatus.Shipped &&
                                  order.Status != OrderStatus.Cancelled)

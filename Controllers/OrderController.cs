@@ -9,7 +9,7 @@ using ShoeProductionApp.ViewModels;
 
 namespace ShoeProductionApp.Controllers;
 
-[Authorize]
+[Authorize(Policy = "CanViewOrders")]
 public class OrdersController : Controller
 {
     private readonly OrderService _orderService;
@@ -85,7 +85,7 @@ public class OrdersController : Controller
     }
 
     [HttpGet]
-    [Authorize(Policy = "CanManageOrders")]
+    [Authorize(Policy = "CanCreateOrders")]
     public async Task<IActionResult> Create()
     {
         var model = new CreateOrderViewModel();
@@ -97,7 +97,7 @@ public class OrdersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Policy = "CanManageOrders")]
+    [Authorize(Policy = "CanCreateOrders")]
     public async Task<IActionResult> Create(CreateOrderViewModel model)
     {
         model.Sizes = (model.Sizes ?? [])
@@ -175,7 +175,7 @@ public class OrdersController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    [Authorize(Policy = "CanManageOrders")]
+    [Authorize(Policy = "CanAdvanceOrders")]
     public async Task<IActionResult> AdvanceStatus(int id)
     {
         var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
